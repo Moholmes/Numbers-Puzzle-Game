@@ -15,6 +15,63 @@ char number;
 position *next;
 }*head=NULL,*tail=NULL ;
 
+class Hash
+{
+  int *table;
+  
+public:
+  int po;
+  Hash(int x);
+
+  void insertItem(int no_of_indexes);
+
+  void deleteItem(int key);
+
+  int hashFunction(int x)
+  {
+    return (x % po);
+  }
+
+  bool searchItem(int num);
+
+  ~Hash()
+  {
+    for (int i = 0; i < po; i++)
+  {
+    table[i] = 0;
+  }
+  }
+};
+Hash::Hash(int no_of_index)
+{
+  this->po = no_of_index;
+  table = new int[po];
+  for (int i = 0; i < po; i++)
+  {
+    table[i] = 0;
+  }
+}
+
+void Hash::insertItem(int position)
+{
+  int index = hashFunction(position);
+  table[index]++;
+}
+
+bool Hash::searchItem(int num)
+{
+  int index = hashFunction(num);
+  if (table[index] > 1)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+Hash nodepos(8);
 
 bool upwardmovability;
 bool downwardmovability;
@@ -94,23 +151,9 @@ void main_menu()
 
 bool checknumbers(position* newvalue)
 {
- bool found=0;
- position *temp=head;
-
- while(temp!=NULL)
-  {
-     if(newvalue->number==temp->number)
-      {
-        found=1;
-        break;
-      }
-      else
-        found=0;
-
-     temp=temp->next;
-  }
-
- return found;
+  int num = newvalue->number;
+  bool x = nodepos.searchItem(num);
+  return x;
 }
 
 void setempty()
@@ -146,37 +189,33 @@ void setempty()
 
 void setnumbers()
 {
-
-
-srand(time(0));
-for(int i=0;i<8;i++)
+  srand(time(0));
+  for (int i = 0; i < 8; i++)
+  {
+    position *newnode = new position;
+    newnode->previous = NULL;
+    do
     {
-      position *newnode=new position;
-      newnode->previous=NULL;
-        do{
-          newnode->number=(1+(rand()%8));
-          }while(checknumbers(newnode));
+      newnode->number = (1 + (rand() % 8));
+      nodepos.insertItem(newnode->number);
+    } while (checknumbers(newnode));
 
-
-      if(head==NULL)
-       {
-        newnode->next=NULL;
-        head=newnode;
-        tail=newnode;
-       }
-
-       else
-        {
-            newnode->next=head;
-            head->previous=newnode;
-            head=newnode;
-        }
-
-
+    if (head == NULL)
+    {
+      newnode->next = NULL;
+      head = newnode;
+      tail = newnode;
     }
 
-setempty();
+    else
+    {
+      newnode->next = head;
+      head->previous = newnode;
+      head = newnode;
+    }
+  }
 
+  setempty();
 }
 
 void game_interface()
@@ -496,6 +535,7 @@ void start_game()
     chances=80;
     scoring=10;
     setnumbers();
+    nodepos.~Hash();
 
     do{
 
