@@ -35,6 +35,7 @@ void main_menu();
 bool checknumbers(position* newvalue);
 void setempty();
 void setnumbers();
+void difficulty(); 
 void game_interface();
 void help();
 void pause();
@@ -58,9 +59,8 @@ int main()
         case '1':
          start_game();
          invalid=0;
-          break;
-
-        case '3':
+          break;         
+         case '3':
          exit(1);
          break;
       }
@@ -175,6 +175,48 @@ for(int i=0;i<8;i++)
 
 setempty();
 
+}
+void difficulty()
+{
+
+  char key;
+  bool invalid = 1;
+  do
+  {
+    system("CLS");
+    cout << "\n\n\n\n\n\t_________________________________\n";
+    cout << "\t|\t   Difficulty\t\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t|\tEasy (Press E)\t\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t|\tModerate (Press M)\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t|\tHard (Press H)\t\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t---------------------------------\n"; 
+    key = getch();
+    if (key == 'E' || key == 'e')
+    {
+      chances = 80;
+      scoring = 10;
+      invalid = 0;
+    }
+
+    if (key == 'M' || key == 'm')
+    {
+      chances = 60;
+      scoring = 100;
+      invalid = 0;
+    }
+
+    if (key == 'H' || key == 'h')
+    {
+      chances = 40;
+      scoring = 1000;
+      invalid = 0;
+    }
+
+  } while (invalid);
 }
 
 void game_interface()
@@ -446,8 +488,7 @@ void looser()
 void start_game()
 {
   do{
-    chances=80;
-    scoring=10;
+    difficulty();
     setnumbers();
 
     do{
