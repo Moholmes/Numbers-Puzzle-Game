@@ -13,8 +13,7 @@ struct position
 position *previous;
 char number;
 position *next;
-}*head=NULL,*tail=NULL ;
-
+}*head=NULL,*tail=NULL;
 class Hash
 {
   int *table;
