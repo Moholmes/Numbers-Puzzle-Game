@@ -38,6 +38,8 @@ void setnumbers();
 void game_interface();
 void help();
 void pause();
+int read_score(); 
+void write_highscore(int current_score);
 void move_empty_tile();
 void winner();
 void looser();
@@ -275,6 +277,41 @@ void pause()
   }while(invalid);
 }
 
+void write_highscore(int current_score)
+{
+  ofstream store;
+  store.open("high scores.txt", ios::app);
+  if (store.fail())
+  {
+    cout << "Error storing the score!!!!";
+  }
+  store << current_score << endl;
+  store.close();
+}
+
+int read_score()
+{
+  int scores;
+  int highest_score;
+  ifstream read_score;
+  read_score.open("high scores.txt", ios::in);
+  if (read_score.fail())
+  {
+    write_highscore(0);
+    return 0;
+  }
+  read_score >> scores;
+  highest_score = scores;
+  read_score.seekg(0, ios::beg);
+  while (read_score >> scores)
+  {
+    if (highest_score < scores)
+    {
+      highest_score = scores;
+    }
+  }
+  return highest_score;
+}
 
 void move_empty_tile()
 {
@@ -400,44 +437,54 @@ void move_empty_tile()
 void winner()
 {
 
-  position *temp=head;
-  for(int i=1;i<=8;i++)
-   {
-     if((int)temp->number!=i)
-      {
-        didnt_win=1;
-        resume=1;
-        break;
-      }
-      else
-      {
-       didnt_win=0;
-       resume=0;
+  position *temp = head;
+  for (int i = 1; i <= 8; i++)
+  {
+    if ((int)temp->number != i)
+    {
+      didnt_win = 1;
+      resume = 1;
+      break;
+    }
+    else
+    {
+      didnt_win = 0;
+      resume = 0;
 
-       if(!didnt_win&&i==8)
+      if (!didnt_win && i == 8)
+      {
+        char key;
+        bool invalid;
+        system("CLS");
+        game_interface();
+        cout << "\n\n\t\tYou you won the game !!!!!\n\n";
+        cout << "\t\tYour score is: " << score;
+        if (score > read_score())
         {
-         char key;
-         bool invalid;
-            system("CLS");
-            game_interface();
-            cout<<"\n\n\t\tYou you won the game !!!!!\n\n";
-                 Sleep(6000);
-                 exit(1);
+          cout << "\n\n\t\tCongratulations!!! You have bitten the highest score\n\n";
         }
-
+        else
+        {
+          cout << "\n\n\t\tThe highest score is: " << read_score();
+          cout << "\n\t\tBit the highest score and prove yourself !! \n\n";
+        }
+        write_highscore(score);
+        Sleep(6000);
+        exit(1);
       }
-
-     temp=temp->next;
-   }
-
+    }
+    temp = temp->next;
+  }
 }
 
 void looser()
 {
-    char key;
-    bool invalid;
-     system("CLS");
-     cout<<"\n\n\t\tYou are a looser !!!!!";
+  char key;
+  bool invalid;
+  system("CLS");
+  cout << "\n\n\t\tYou are a looser !!!!!";
+  cout << "\n\n\t\tThe highest score is: " << read_score();
+  cout << "\n\t\tBit the highest score and prove yourself !! \n\n";
      Sleep(6000);
      exit(1);
 
