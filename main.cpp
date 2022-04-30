@@ -15,6 +15,63 @@ char number;
 position *next;
 }*head=NULL,*tail=NULL ;
 
+class Hash
+{
+  int *table;
+  
+public:
+  int po;
+  Hash(int x);
+
+  void insertItem(int no_of_indexes);
+
+  void deleteItem(int key);
+
+  int hashFunction(int x)
+  {
+    return (x % po);
+  }
+
+  bool searchItem(int num);
+
+  ~Hash()
+  {
+    for (int i = 0; i < po; i++)
+  {
+    table[i] = 0;
+  }
+  }
+};
+Hash::Hash(int no_of_index)
+{
+  this->po = no_of_index;
+  table = new int[po];
+  for (int i = 0; i < po; i++)
+  {
+    table[i] = 0;
+  }
+}
+
+void Hash::insertItem(int position)
+{
+  int index = hashFunction(position);
+  table[index]++;
+}
+
+bool Hash::searchItem(int num)
+{
+  int index = hashFunction(num);
+  if (table[index] > 1)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+Hash nodepos(8);
 
 bool upwardmovability;
 bool downwardmovability;
@@ -38,6 +95,8 @@ void setnumbers();
 void game_interface();
 void help();
 void pause();
+int read_score(); 
+void write_highscore(int current_score);
 void move_empty_tile();
 void winner();
 void looser();
@@ -100,23 +159,9 @@ void main_menu()
 
 bool checknumbers(position* newvalue)
 {
- bool found=0;
- position *temp=head;
-
- while(temp!=NULL)
-  {
-     if(newvalue->number==temp->number)
-      {
-        found=1;
-        break;
-      }
-      else
-        found=0;
-
-     temp=temp->next;
-  }
-
- return found;
+  int num = newvalue->number;
+  bool x = nodepos.searchItem(num);
+  return x;
 }
 
 void setempty()
@@ -152,37 +197,33 @@ void setempty()
 
 void setnumbers()
 {
-
-
-srand(time(0));
-for(int i=0;i<8;i++)
+  srand(time(0));
+  for (int i = 0; i < 8; i++)
+  {
+    position *newnode = new position;
+    newnode->previous = NULL;
+    do
     {
-      position *newnode=new position;
-      newnode->previous=NULL;
-        do{
-          newnode->number=(1+(rand()%8));
-          }while(checknumbers(newnode));
+      newnode->number = (1 + (rand() % 8));
+      nodepos.insertItem(newnode->number);
+    } while (checknumbers(newnode));
 
-
-      if(head==NULL)
-       {
-        newnode->next=NULL;
-        head=newnode;
-        tail=newnode;
-       }
-
-       else
-        {
-            newnode->next=head;
-            head->previous=newnode;
-            head=newnode;
-        }
-
-
+    if (head == NULL)
+    {
+      newnode->next = NULL;
+      head = newnode;
+      tail = newnode;
     }
 
-setempty();
+    else
+    {
+      newnode->next = head;
+      head->previous = newnode;
+      head = newnode;
+    }
+  }
 
+  setempty();
 }
 
 void game_interface()
@@ -323,6 +364,41 @@ void pause()
   }while(invalid);
 }
 
+void write_highscore(int current_score)
+{
+  ofstream store;
+  store.open("high scores.txt", ios::app);
+  if (store.fail())
+  {
+    cout << "Error storing the score!!!!";
+  }
+  store << current_score << endl;
+  store.close();
+}
+
+int read_score()
+{
+  int scores;
+  int highest_score;
+  ifstream read_score;
+  read_score.open("high scores.txt", ios::in);
+  if (read_score.fail())
+  {
+    write_highscore(0);
+    return 0;
+  }
+  read_score >> scores;
+  highest_score = scores;
+  read_score.seekg(0, ios::beg);
+  while (read_score >> scores)
+  {
+    if (highest_score < scores)
+    {
+      highest_score = scores;
+    }
+  }
+  return highest_score;
+}
 
 void move_empty_tile()
 {
@@ -448,38 +524,45 @@ void move_empty_tile()
 void winner()
 {
 
-  position *temp=head;
-  for(int i=1;i<=8;i++)
-   {
-     if((int)temp->number!=i)
-      {
-        didnt_win=1;
-        resume=1;
-        break;
-      }
-      else
-      {
-       didnt_win=0;
-       resume=0;
+  position *temp = head;
+  for (int i = 1; i <= 8; i++)
+  {
+    if ((int)temp->number != i)
+    {
+      didnt_win = 1;
+      resume = 1;
+      break;
+    }
+    else
+    {
+      didnt_win = 0;
+      resume = 0;
 
-       if(!didnt_win&&i==8)
+      if (!didnt_win && i == 8)
+      {
+        char key;
+        bool invalid;
+        system("CLS");
+        game_interface();
+        cout << "\n\n\t\tYou you won the game !!!!!\n\n";
+        cout << "\t\tYour score is: " << score;
+        if (score > read_score())
         {
-         char key;
-         bool invalid;
-            system("CLS");
-            game_interface();
-            cout<<"\n\n\t\tYou you won the game !!!!!\n\n"; 
-            cout << "\n\npress any key to exit";
-            key = getch();
-            exit(1);
+          cout << "\n\n\t\tCongratulations!!! You have bitten the highest score\n\n";
         }
-            
-
+        else
+        {
+          cout << "\n\n\t\tThe highest score is: " << read_score();
+          cout << "\n\t\tBit the highest score and prove yourself !! \n\n";
+        }
+        write_highscore(score);
+        cout << "\n\npress any key to exit";
+        key = getch();
+        exit(1);
       }
-
-     temp=temp->next;
-   }
-
+    }
+    temp = temp->next;
+  }
 }
 
 void looser()
@@ -488,6 +571,8 @@ void looser()
      bool invalid;
      system("CLS");
      cout<<"\n\n\t\tYou are a looser !!!!!";
+     cout << "\n\n\t\tThe highest score is: " << read_score();
+     cout << "\n\t\tBit the highest score and prove yourself !! \n\n";
      cout << "\n\npress any key to exit";
      key = getch();
      exit(1);
@@ -500,6 +585,7 @@ void start_game()
     chances=80;
     scoring=10;
     setnumbers();
+    nodepos.~Hash();
 
     do{
 
