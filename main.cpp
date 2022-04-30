@@ -59,6 +59,11 @@ int main()
          start_game();
          invalid=0;
           break;
+        
+        case '2':
+         help();
+         invalid = 0;
+        break;
 
         case '3':
          exit(1);
@@ -78,15 +83,17 @@ void main_menu()
     cout<<"\t\twelcome to the number slider puzzle game!!!!\n";
     cout<<"\t_______________________________________________________________\n\n\n\n";
 
-    cout<<"\t\t *  *  *  *  *  *  *  *  *  *  *  *  *  * * \n";
-    cout<<"\t\t*                                          *\n";
-    cout<<"\t\t*  \t\tMAIN MENU\t\t   *\n";
-    cout<<"\t\t*                                          *\n";
-    cout<<"\t\t*                                          *\n";
-    cout<<"\t\t*  \tStart game --> press 1\t\t   *\n";
-    cout<<"\t\t*                                          *\n";
-    cout<<"\t\t*  \texit --> press 3\t\t   *\n";
-    cout<<"\t\t *  *  *  *  *  *  *  *  *  *  *  *  *  * * \n\n";
+    cout << "\t\t *  *  *  *  *  *  *  *  *  *  *  *  *  * * \n";
+  cout << "\t\t*                                          *\n";
+  cout << "\t\t*  \t\tMAIN MENU\t\t   *\n";
+  cout << "\t\t*                                          *\n";
+  cout << "\t\t*                                          *\n";
+  cout << "\t\t*  \tStart game --> press 1\t\t   *\n";
+  cout << "\t\t*                                          *\n";
+  cout << "\t\t*  \tInstructions --> press 2\t   *\n";
+  cout << "\t\t*                                          *\n";
+  cout << "\t\t*  \texit --> press 3\t\t   *\n";
+  cout << "\t\t *  *  *  *  *  *  *  *  *  *  *  *  *  * * \n\n";
 
 }
 
@@ -205,7 +212,47 @@ void game_interface()
    cout<<"\t-------------------------\n";
 
 }
+void help()
+{
+  int n = 1;
+  char anykey;
+  system("CLS");
+  cout << "\n\n\t\tHelp\n";
+  cout << "\t\t----\n\n";
+  cout << "\tThis game helps to increase the intelligence of the player. So in\n";
+  cout << "\torder to win, you have to organize the numbers in an ascending\n";
+  cout << "\torder by moving the empty tile.Based on the difficulty you select\n";
+  cout << "\tyou will be given chances.If you select easy you will be given\n";
+  cout << "\t80 chances,if you select moderate you will be given 60 chances\n";
+  cout << "\tand if you select hard you will be given 40 chances\n";
+  cout << "\tYou will win if the numbers are ordered in this form:\n\n";
 
+  for (int i = 1; i <= 3; i++)
+  {
+    for (int j = 1; j <= 3; j++)
+    {
+      if (i == 3 && j == 3)
+        cout << " ";
+      else
+        cout << "\t" << n;
+
+      n++;
+    }
+    cout << endl
+         << endl;
+  }
+
+  cout << "\n\t\tControl Settings\n";
+  cout << "\t\t-----------------\n\n";
+  cout << "\t   Move up................W\n";
+  cout << "\t   Move down..............S\n";
+  cout << "\t   Move left..............A\n";
+  cout << "\t   Move right.............D\n";
+  cout << "\t   Pause..................P";
+  cout << "\nPress any key to continue...";
+  anykey = getch();
+  back_to_menu = 1;
+}
 
 void pause()
 {
