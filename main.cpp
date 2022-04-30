@@ -100,6 +100,8 @@ void difficulty();                       // to set the difficulty of the game
 void game_interface();                   // to display the game
 void help();                             // to display instructions to let the player know about the game
 void pause();                            // to pause the game;
+int read_score();                        // to read the highest score
+void write_highscore(int current_score); // to store the score if it breaks the highest score
 void move_empty_tile();                  // to move the empty tile
 void winner();                           // to check if the player won the game
 void looser();                           // to tell the player he/she lost the game
