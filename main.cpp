@@ -45,6 +45,7 @@ void start_game();
 
 int main()
 {
+  system("color 8f");
  do
   {
    char choice;
@@ -467,10 +468,12 @@ void winner()
          bool invalid;
             system("CLS");
             game_interface();
-            cout<<"\n\n\t\tYou you won the game !!!!!\n\n";
-                 Sleep(6000);
-                 exit(1);
+            cout<<"\n\n\t\tYou you won the game !!!!!\n\n"; 
+            cout << "\n\npress any key to exit";
+            key = getch();
+            exit(1);
         }
+            
 
       }
 
@@ -481,11 +484,12 @@ void winner()
 
 void looser()
 {
-    char key;
-    bool invalid;
+     char key;
+     bool invalid;
      system("CLS");
      cout<<"\n\n\t\tYou are a looser !!!!!";
-     Sleep(6000);
+     cout << "\n\npress any key to exit";
+     key = getch();
      exit(1);
 
 }
