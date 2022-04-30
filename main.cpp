@@ -7,7 +7,7 @@
 using namespace std;
 
 
-
+//*****Structure used*****
 struct position
 {
 position *previous;
@@ -72,36 +72,39 @@ bool Hash::searchItem(int num)
 }
 
 Hash nodepos(8);
+//---------------------
 
-bool upwardmovability;
-bool downwardmovability;
-bool rightmovability;
-bool leftmovability;
-bool back_to_menu;
-bool restart_game;
-bool p;
-bool pa;
-bool resume;
-bool play_again;
-int chances;
-bool didnt_win;
-int score;
-int scoring;
+//********Global variables********
+bool upwardmovability;   // to check if the empty tile can move upward
+bool downwardmovability; // to check if the empty tile can move downward
+bool rightmovability;    // to check if the empty tile can move right
+bool leftmovability;     // to check if the empty tile can move left
+bool back_to_menu;       // to make the player to go back to main menu
+bool restart_game;       // to restart game
+bool p;                  // to restart game from the pause menu
+bool pa;                 // to go back to main menu from the pause menu
+bool resume;             // to resume game
+bool play_again;         // to play again
+int chances;             // to give the player chances based on the difficulty the player chooses
+bool didnt_win;          // to check if the player won
+int score;               // to calculate the score of the player
+int scoring;             // to set scale for giving scores based on the difficulty selected
+//-------------------------------
 
-void main_menu();
-bool checknumbers(position* newvalue);
-void setempty();
-void setnumbers();
-void game_interface();
-void help();
-void pause();
-int read_score(); 
-void write_highscore(int current_score);
-void move_empty_tile();
-void winner();
-void looser();
-void start_game();
-
+//********Functions used*****
+void main_menu();                        // to display the main menu
+bool checknumbers(position *newvalue);   // To avoid the repetition of random number generated new node.newvalue receives the value of newnode
+void setempty();                         // to put the empty tile randomly in a position
+void setnumbers();                       // To set the numbers randomly when the game starts
+void difficulty();                       // to set the difficulty of the game
+void game_interface();                   // to display the game
+void help();                             // to display instructions to let the player know about the game
+void pause();                            // to pause the game;
+void move_empty_tile();                  // to move the empty tile
+void winner();                           // to check if the player won the game
+void looser();                           // to tell the player he/she lost the game
+void start_game();                       // to start the game
+//----------------------------------
 int main()
 {
  do
@@ -117,9 +120,8 @@ int main()
         case '1':
          start_game();
          invalid=0;
-          break;
-
-        case '3':
+          break;         
+         case '3':
          exit(1);
          break;
       }
@@ -216,6 +218,48 @@ void setnumbers()
   }
 
   setempty();
+}
+void difficulty()
+{
+
+  char key;
+  bool invalid = 1;
+  do
+  {
+    system("CLS");
+    cout << "\n\n\n\n\n\t_________________________________\n";
+    cout << "\t|\t   Difficulty\t\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t|\tEasy (Press E)\t\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t|\tModerate (Press M)\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t|\tHard (Press H)\t\t|\n";
+    cout << "\t|                      \t\t|\n";
+    cout << "\t---------------------------------\n"; 
+    key = getch();
+    if (key == 'E' || key == 'e')
+    {
+      chances = 80;
+      scoring = 10;
+      invalid = 0;
+    }
+
+    if (key == 'M' || key == 'm')
+    {
+      chances = 60;
+      scoring = 100;
+      invalid = 0;
+    }
+
+    if (key == 'H' || key == 'h')
+    {
+      chances = 40;
+      scoring = 1000;
+      invalid = 0;
+    }
+
+  } while (invalid);
 }
 
 void game_interface()
@@ -532,8 +576,7 @@ void looser()
 void start_game()
 {
   do{
-    chances=80;
-    scoring=10;
+    difficulty();
     setnumbers();
     nodepos.~Hash();
 
