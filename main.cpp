@@ -602,7 +602,8 @@ void winner()
           cout << "\n\t\tBit the highest score and prove yourself !! \n\n";
         }
         write_highscore(score);
-        Sleep(6000);
+        cout << "\n\n   press any key to exit";
+        key = getch();
         exit(1);
       }
     }
@@ -618,8 +619,9 @@ void looser()
   cout << "\n\n\t\tYou are a looser !!!!!";
   cout << "\n\n\t\tThe highest score is: " << read_score();
   cout << "\n\t\tBit the highest score and prove yourself !! \n\n";
-     Sleep(6000);
-     exit(1);
+  cout << "\n\n   press any key to exit";
+  key = getch();
+  exit(1);
 
 }
 
